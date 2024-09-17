@@ -1,4 +1,3 @@
-from utils_me.data_processing import pre_process_text, perform_wordcloud, perform_and_show_NER, top_persons_and_org, most_positive_n_negative, remove_specific_divs, process_sentiment_analysis_sentence
 import re
 import pandas as pd
 import streamlit as st
@@ -9,10 +8,14 @@ import pandas as pd
 import plotly.express as px
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
-import streamlit as st
 import pickle
 import os
-from utils_me.data_processing import perform_and_show_NER_with_sentiment, visualize_sentiment_distribution_for_top_entities
+from utils_me.data_processing import (
+    pre_process_text, perform_wordcloud, perform_and_show_NER, 
+    top_persons_and_org, most_positive_n_negative, remove_specific_divs, 
+    process_sentiment_analysis_sentence, perform_and_show_NER_with_sentiment, 
+    visualize_sentiment_distribution_for_top_entities
+)
 
 st.set_page_config(layout="wide")
 st.title("Trump Speech Analysis App")
@@ -102,6 +105,81 @@ def train_topic_model(df, n_topics=25, debug=False):
     
     return vectorizer, lda
 
+
+
+
+# def add_transcript():
+#     from datetime import datetime
+
+#     st.title("Add a New Transcript")
+
+#     # Define the data file path
+#     data_file = 'updated_trump_speech_transcripts_processed_with_titles.pkl'
+    
+#     # Load existing data or create a new DataFrame
+#     if os.path.exists(data_file):
+#         df = pd.read_pickle(data_file)
+#     else:
+#         # Define columns
+#         columns = ['Sr No', 'Source', 'Link', 'Date', 'Duration', 'transcript', 'Title', 'new_title', 'processed_text']
+#         df = pd.DataFrame(columns=columns)
+
+#     st.write("### Enter the details of the new transcript below:")
+
+#     with st.form("new_transcript_form"):
+#         # User Inputs
+#         title = st.text_input("Title", "")
+#         new_title = st.text_input("New Title (optional)", title)
+#         transcript = st.text_area("Transcript", "")
+#         source = st.text_input("Source", "None")
+#         link = st.text_input("Link", "None")
+#         date = st.date_input("Date", datetime.today())
+#         duration = st.text_input("Duration", "None")
+
+#         # Form Submission
+#         submitted = st.form_submit_button("Add Transcript")
+#         if submitted:
+#             # Validation
+#             if not title.strip():
+#                 st.error("**Title** is required.")
+#             elif not transcript.strip():
+#                 st.error("**Transcript** is required.")
+#             else:
+#                 # Determine next Sr No
+#                 if not df.empty and pd.api.types.is_numeric_dtype(df['Sr No']):
+#                     sr_no = int(df['Sr No'].max()) + 1
+#                 else:
+#                     sr_no = 1
+
+#                 # Preprocess transcript
+#                 processed_text = preprocess_text(transcript)
+
+#                 # Prepare the new row
+#                 new_row = {
+#                     'Sr No': sr_no,
+#                     'Source': source if source.strip() and source.lower() != 'none' else None,
+#                     'Link': link if link.strip() and link.lower() != 'none' else None,
+#                     'Date': date if date else None,
+#                     'Duration': duration if duration.strip() and duration.lower() != 'none' else None,
+#                     'transcript': transcript,
+#                     'Title': title,
+#                     'new_title': new_title if new_title.strip() else title,
+#                     'processed_text': processed_text
+#                 }
+
+#                 # Convert new_row to DataFrame
+#                 new_row_df = pd.DataFrame([new_row])
+
+#                 # Append to existing DataFrame
+#                 df = pd.concat([df, new_row_df], ignore_index=True)
+
+#                 # Save updated DataFrame
+#                 df.to_pickle(data_file)
+
+#                 st.success(f"**Transcript '{title}'** added successfully with **Sr No {sr_no}**.")
+
+
+
 def get_topic_words(model, feature_names, n_top_words=10):
     topic_words = []
     for topic_idx, topic in enumerate(model.components_):
@@ -125,40 +203,51 @@ def load_model():
 def load_data():
     df = pd.read_pickle('updated_trump_speech_transcripts_processed_with_titles.pkl')
     return df 
-
-# Load transcript data
 df = load_data()
 
 # Transcript Selection
 st.subheader("Select a Transcript")
 
-# Step 1: Get the unique durations from the "Duration" column
-unique_durations = df['Duration'].unique()
+# Option to choose between default selection or custom input
+input_option = st.radio("Choose input method:", ("Select from existing transcripts", "Paste custom text", "Upload text file"))
 
-# Step 2: Ask the user to select a duration using a selectbox
-selected_duration = st.selectbox("Select the duration of transcripts you would like to see", unique_durations)
+if input_option == "Select from existing transcripts":
+    # Step 1: Get the unique durations from the "Duration" column
+    unique_durations = df['Duration'].unique()
 
-# Step 3: Filter the DataFrame based on the selected duration
-filtered_df = df[df['Duration'] == selected_duration]
+    # Step 2: Ask the user to select a duration using a selectbox
+    selected_duration = st.selectbox("Select the duration of transcripts you would like to see", unique_durations)
 
-# Step 4: Display the titles from the filtered DataFrame, and also show the "Sr No" for identification
-selected_title = st.selectbox("Select a transcript by title (use Sr No for reference)", 
-                              filtered_df[['Sr No', 'new_title']].apply(lambda x: f"{x['Sr No']}: {x['new_title']}", axis=1))
+    # Step 3: Filter the DataFrame based on the selected duration
+    filtered_df = df[df['Duration'] == selected_duration]
 
-# Step 5: Extract the "Sr No" from the selected option to locate the transcript
-selected_sr_no = int(selected_title.split(":")[0])  # Extract the "Sr No" from the selected option
+    # Step 4: Display the titles from the filtered DataFrame, and also show the "Sr No" for identification
+    selected_title = st.selectbox("Select a transcript by title (use Sr No for reference)", 
+                                  filtered_df[['Sr No', 'new_title']].apply(lambda x: f"{x['Sr No']}: {x['new_title']}", axis=1))
 
-# Step 6: Retrieve the transcript using the "Sr No"
-text = df.loc[df['Sr No'] == selected_sr_no, 'transcript'].values[0]
+    # Step 5: Extract the "Sr No" from the selected option to locate the transcript
+    selected_sr_no = int(selected_title.split(":")[0])  # Extract the "Sr No" from the selected option
+
+    # Step 6: Retrieve the transcript using the "Sr No"
+    text = df.loc[df['Sr No'] == selected_sr_no, 'transcript'].values[0]
+
+elif input_option == "Paste custom text":
+    text = st.text_area("Paste your transcript here:", height=300)
+
+else:  # Upload text file
+    uploaded_file = st.file_uploader("Choose a text file", type="txt")
+    if uploaded_file is not None:
+        text = uploaded_file.getvalue().decode("utf-8")
+    else:
+        text = ""
 
 if text:
     # Word Cloud Section
     st.header("Word Cloud for the Selected Transcript")
-    # st.write(text)
     processed_text = pre_process_text(text)
     img = perform_wordcloud(text)
     st.image(img, caption='Word Cloud', use_column_width=True)
-    # df = pd.read_pickle('updated_trump_speech_transcripts_processed_with_few_titles.pkl')
+
     # Named Entity Recognition (NER)
     st.header("Entities Mentioned: A Closer Look")
     html, fig = perform_and_show_NER(text)
@@ -211,9 +300,6 @@ if text:
         else:
             st.write("No strong themes identified in the selected transcript.")
 
-
-
-
     # Sentiment Analysis
     st.header("Sentiment Analysis")
     most_positive_n_negative(text)
@@ -239,4 +325,5 @@ if text:
     st.subheader("Sentiment Distribution for Top Entities")
     visualize_sentiment_distribution_for_top_entities(entity_sentiment_df, top_n=2)
 
-    st.success("Script executed successfully!")
+else:
+    st.warning("Please select a transcript or provide custom text to analyze.")
