@@ -29,26 +29,26 @@ mkdir Projects
 NOTE: *home_dir* is sometimes the same as the username in the terminal prompt
 
 ### Step 2: Clone the private repo political-speech-analysis
-NOTE: if you've already configured an SSH key for your GitHub profile and current device, skip to step 2e
+NOTE: if you've already configured an SSH key for your GitHub profile and current device, skip to step 2c
 
 #### Step 2a: Generate SSH key
 Follow GitHub's instructions <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>
 
 Complete sections **Generating a new SSH key** and **Adding your SSH key to the ssh-agent**
 
-NOTE: save the key in the default location and it is not necessary to create a passphrase; ensure you remove the `UseKeychain` line
-from the `/.ssh/config` file if you omit the passphrase
+NOTE: Save the key in the default location. It is not necessary to create a passphrase, but ensure you remove the `UseKeychain` line
+from the `/.ssh/config` file if you omit the passphrase.
 
-### Step 2b: Add the SSH public key to your GitHub account
+#### Step 2b: Add the SSH public key to your GitHub account
 Follow GitHub's instructions <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account>
 
 Complete the section **Adding a new SSH key to your account**
 
-### Step 2c: Clone the repo using SSH
-Go to the main repo <https://github.com/sstrickland85/political-speech-analysis/tree/main>
-Select the Code dropdown, select SSH, and copy the URL to clipboard
-In terminal, navigate to the project directory /Users/*home_dir*/Projects
-Run the `git clone` *pasted_url* to clone the repo e.g.:
+#### Step 2c: Clone the repo using SSH
+- Go to the main repo <https://github.com/sstrickland85/political-speech-analysis/tree/main>
+- Select the Code dropdown, select SSH, and copy the URL to clipboard
+- In terminal, navigate to the project directory /Users/*home_dir*/Projects
+- Run the `git clone` *pasted_url* to clone the repo e.g.:
 ```bash
 cd /Users/home_dir/Projects
 git clone git@github.com:username/private-repo.git
@@ -59,7 +59,7 @@ Navigate to the repo `/Users/home_dir/repo` and run:
 ```bash
 python -m venv --prompt coolname .venv
 ```
-NOTE: `-- promt coolname` is not required but is useful for distinguishing between virtual environments. If used it should be unique. Its displayed on the prompt when you activate the virtual environment.
+    > NOTE: `--promt coolname` is not required but is useful for distinguishing between virtual environments. If used, *coolname* should be unique. It will display on the prompt when you activate the virtual environment.
 
 ### Step 4: Activate the virtual environment
 From the repo directory, run:
@@ -80,8 +80,7 @@ streamlit run main.py
 ```
 
 ## Stopping the application
-From terminal press `ctrl+Z`
-To deactivate the virtual environment run `deactivate`
+From terminal press `ctrl+Z` and to deactivate the virtual environment run `deactivate`
 
 ## How to Use the Application
 1. **Select a Transcript**: Begin by selecting a transcript from the provided dropdown menu. The application will process the selected speech and display the corresponding insights.
