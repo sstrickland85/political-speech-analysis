@@ -26,17 +26,17 @@ Launch terminal, ensure you are in your home directory i.e. /Users/*home_dir*, a
 pwd #returns the current directory
 mkdir Projects
 ```
-NOTE: *home_dir* is sometimes the same as the username in the terminal prompt
+**NOTE**: *home_dir* is sometimes the same as the username in the terminal prompt
 
 ### Step 2: Clone the private repo political-speech-analysis
-NOTE: if you've already configured an SSH key for your GitHub profile and current device, skip to step 2c
+**NOTE**: if you've already configured an SSH key for your GitHub profile and current device, skip to step 2c
 
 #### Step 2a: Generate SSH key
 Follow GitHub's instructions <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>
 
 Complete sections **Generating a new SSH key** and **Adding your SSH key to the ssh-agent**
 
-NOTE: Save the key in the default location. It is not necessary to create a passphrase, but ensure you remove the `UseKeychain` line
+**NOTE**: Save the key in the default location. It is not necessary to create a passphrase, but ensure you remove the `UseKeychain` line
 from the `/.ssh/config` file if you omit the passphrase.
 
 #### Step 2b: Add the SSH public key to your GitHub account
@@ -60,7 +60,7 @@ Navigate to the repo `/Users/home_dir/repo` and run:
 python -m venv --prompt coolname .venv
 ```
 
-    NOTE: `--promt coolname` is not required but is useful for distinguishing between virtual environments. If used, *coolname* should be unique. It will display on the prompt when you activate the virtual environment.
+**NOTE**: `--promt coolname` is not required but is useful for distinguishing between virtual environments. If used, *coolname* should be unique. It will display on the prompt when you activate the virtual environment.
 
 ### Step 4: Activate the virtual environment
 From the repo directory, run:
