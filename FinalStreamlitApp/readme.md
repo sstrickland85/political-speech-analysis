@@ -59,6 +59,7 @@ Navigate to the repo `/Users/home_dir/repo` and run:
 ```bash
 python -m venv --prompt coolname .venv
 ```
+
     > NOTE: `--promt coolname` is not required but is useful for distinguishing between virtual environments. If used, *coolname* should be unique. It will display on the prompt when you activate the virtual environment.
 
 ### Step 4: Activate the virtual environment
