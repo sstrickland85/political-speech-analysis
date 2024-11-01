@@ -15,22 +15,73 @@ This repository contains an interactive web application designed for comprehensi
 - **Named Entity Statistics**: Users can explore the top mentioned entities (e.g., persons, organizations) in the speech, with the option to compare their occurrence.
 
 ## Installation and Setup
+The commands below are directed at Mac users. Windows users need to look up equivalent commands.
+
 ### Prerequisites:
 Ensure that Python is installed on your system. 
 
-### THIS IS A CHANGE
+### Step 1: Create a project directory.
+Launch terminal, ensure you are in your home directory i.e. /Users/*home_dir*, and run:
+```bash
+pwd #returns the current directory
+mkdir Projects
+```
+NOTE: *home_dir* is sometimes the same as the username in the terminal prompt
 
-### Step 1: Install Dependencies
+### Step 2: Clone the private repo political-speech-analysis
+NOTE: if you've already configured an SSH key for your GitHub profile and current device, skip to step 2e
+
+#### Step 2a: Generate SSH key
+Follow GitHub's instructions <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>
+
+Complete sections **Generating a new SSH key** and **Adding your SSH key to the ssh-agent**
+
+NOTE: save the key in the default location and it is not necessary to create a passphrase; ensure you remove the `UseKeychain` line
+from the `/.ssh/config` file if you omit the passphrase
+
+### Step 2b: Add the SSH public key to your GitHub account
+Follow GitHub's instructions <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account>
+
+Complete the section **Adding a new SSH key to your account**
+
+### Step 2c: Clone the repo using SSH
+Go to the main repo <https://github.com/sstrickland85/political-speech-analysis/tree/main>
+Select the Code dropdown, select SSH, and copy the URL to clipboard
+In terminal, navigate to the project directory /Users/*home_dir*/Projects
+Run the `git clone` *pasted_url* to clone the repo e.g.:
+```bash
+cd /Users/home_dir/Projects
+git clone git@github.com:username/private-repo.git
+```
+
+### Step 3: Create a virtual environment
+Navigate to the repo `/Users/home_dir/repo` and run:
+```bash
+python -m venv --prompt coolname .venv
+```
+NOTE: `-- promt coolname` is not required but is useful for distinguishing between virtual environments. If used it should be unique. Its displayed on the prompt when you activate the virtual environment.
+
+### Step 4: Activate the virtual environment
+From the repo directory, run:
+```bash
+source .venv/bin/activate
+```
+
+### Step 5: Install Dependencies
 To install the required libraries, run the following command:
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 2: Run the Application
+### Step 6: Run the Application
 To launch the application, execute:
 ```bash
 streamlit run main.py
 ```
+
+## Stopping the application
+From terminal press `ctrl+Z`
+To deactivate the virtual environment run `deactivate`
 
 ## How to Use the Application
 1. **Select a Transcript**: Begin by selecting a transcript from the provided dropdown menu. The application will process the selected speech and display the corresponding insights.
