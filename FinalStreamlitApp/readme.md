@@ -1,4 +1,4 @@
-
+# THIS IS A TEST
 # Speech Analysis Application
 
 This repository contains an interactive web application designed for comprehensive analysis of speeches. The application allows users to explore various insights such as sentiment analysis, named entity recognition (NER), word clouds, and more. By selecting a speech transcript, users can delve into the prominent words, entities, and sentiments presented in the speech.
